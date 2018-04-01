@@ -1,5 +1,5 @@
-# PyDarknet
-A Python wrapper on [Darknet](https://github.com/pjreddie/darknet). Compatible with Latest [YOLO V3](https://pjreddie.com/darknet/yolo).
+# PyYOLOV3
+A Python wrapper on [Darknet](https://github.com/pjreddie/darknet). Compatible with latest [YOLO V3](https://pjreddie.com/darknet/yolo).
 
 ## Pre-requisites
 1) Python 3.5
