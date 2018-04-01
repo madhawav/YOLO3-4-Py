@@ -1,0 +1,11 @@
+*.idea
+
+cfg/*.data
+cfg/*.cfg
+
+weights/*.weights
+
+pydarknet.c
+pydarknet.html
+*.o
+*.so
