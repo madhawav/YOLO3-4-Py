@@ -15,10 +15,14 @@ if __name__ == "__main__":
         r, frame = cap.read()
         if r:
             start_time = time.time()
+
+            # Only measure the time taken by YOLO and API Call overhead
+
             dark_frame = Image(frame)
             results = net.detect(dark_frame)
-            end_time = time.time()
+            del dark_frame
 
+            end_time = time.time()
             print("Elapsed Time:",end_time-start_time)
 
             for cat, score, bounds in results:

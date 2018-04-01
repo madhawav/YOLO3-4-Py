@@ -28,9 +28,12 @@ image get_darknet_image(const Mat &input){
     IplImage ipltemp=flipped;
     cvCopy(&ipltemp,iplImage);
 
-    flipped.deallocate();
+    flipped.release();
 
     // Convert to Darknet Image
     image darknet_image = ipl_to_image(iplImage);
+
+    // Free memory
+    cvReleaseImage(&iplImage);
     return darknet_image;
 }

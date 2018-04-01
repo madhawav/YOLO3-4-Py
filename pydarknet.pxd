@@ -14,6 +14,7 @@ cdef extern from "bridge.h":
         int cols
         int channels()
         void deallocate()
+        void release()
 
     ctypedef struct box:
         float x, y, w, h

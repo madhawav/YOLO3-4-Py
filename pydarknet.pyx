@@ -16,14 +16,12 @@ cdef class Image:
         cdef int r = ary.shape[0]
         cdef int c = ary.shape[1]
         cdef Mat m
-
         m.create(r, c, CV_8UC3)
         memcpy(m.data, im_buff, r*c*3)
-        m.deallocate()
-
         # End of adapted code block
 
         self.img = get_darknet_image(m)
+        m.release()
 
     def show_image(self, char* title):
         show_image(self.img, title)

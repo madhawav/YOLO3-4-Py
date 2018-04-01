@@ -5,8 +5,9 @@ cfg/*.cfg
 
 weights/*.weights
 
+pydarknet.cpp
 pydarknet.c
 pydarknet.html
 *.o
 *.so
-*.env
+.env
