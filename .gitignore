@@ -9,3 +9,4 @@ pydarknet.c
 pydarknet.html
 *.o
 *.so
+*.env

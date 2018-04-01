@@ -1,3 +1,5 @@
+# distutils: language = "c++"
+
 import numpy as np
 
 from libc.string cimport memcpy
@@ -6,6 +8,7 @@ cdef class Image:
     cdef image img;
 
     def __cinit__(self, np.ndarray ary):
+        # Code adapted from https://github.com/solivr/cython_opencvMat
         assert ary.ndim==3 and ary.shape[2]==3, "ASSERT::3channel RGB only!!"
 
         cdef np.ndarray[np.uint8_t, ndim=3, mode ='c'] np_buff = np.ascontiguousarray(ary, dtype=np.uint8)
@@ -14,12 +17,11 @@ cdef class Image:
         cdef int c = ary.shape[1]
         cdef Mat m
 
-        cdef int a = CV_8UC3
-        # print(a)
-
-        m.create(r, c, a)
+        m.create(r, c, CV_8UC3)
         memcpy(m.data, im_buff, r*c*3)
         m.deallocate()
+
+        # End of adapted code block
 
         self.img = get_darknet_image(m)
 
@@ -36,6 +38,8 @@ cdef class Detector:
     def __cinit__(self, char* config, char* weights, int p, char* meta):
         self.net = load_network(config, weights, p)
         self.meta = get_metadata(meta)
+
+    # Code adapted from https://github.com/pjreddie/darknet/blob/master/python/darknet.py
 
     def classify(self, Image img):
         out = network_predict_image(self.net, img.img)
@@ -65,6 +69,8 @@ cdef class Detector:
 
         free_detections(dets, num)
         return res
+
+    # End of adapted code block
 
     def __dealloc__(self):
         free_network(self.net)
