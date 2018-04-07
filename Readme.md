@@ -1,4 +1,4 @@
-# PyYOLOV3
+# YOLO3-4-Py
 A Python wrapper on [Darknet](https://github.com/pjreddie/darknet). Compatible with latest [YOLO V3](https://pjreddie.com/darknet/yolo).
 
 ## Pre-requisites
