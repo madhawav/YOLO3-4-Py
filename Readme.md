@@ -3,11 +3,25 @@ A Python wrapper on [Darknet](https://github.com/pjreddie/darknet). Compatible w
 
 ## Pre-requisites
 1) Python 3.5
-2) Numpy `pip3 install numpy`
-3) OpenCV Python `pip3 install opencv-python`
+2) Numpy, cython and pkgconfig `pip3 install numpy cython pkgconfig`
+3) OpenCV 3.x with Python bindings. (Tested on OpenCV 3.4.0)
+    - You can use [this script](tools/install_opencv34.sh) to automate Open CV 3.4 installation (Tested on Ubuntu 16.04).
 
-## How to run?
-1) Download and compile [darknet](https://github.com/pjreddie/darknet).
+```
+NOTE: OpenCV 3.4.1 has a bug which causes Darknet to fail. Therefore this wrapper would not work with OpenCV 3.4.1.
+More details are available at https://github.com/pjreddie/darknet/issues/502
+```
+
+## How to run using docker?
+1) Navigate to [docker](/docker) directory.
+2) Copy sample images into the `input` directory. Or else run [input/download_sample_images.sh](docker/input/download_sample_images.sh)
+3) Run `sh run.sh`
+4) Observe the outputs generated in `output` directory.
+
+
+## How to run in local machine?
+1) Download [darknet](https://github.com/pjreddie/darknet) and compile with OpenCV enabled.
+    - Open Makefile of darknet and set OPENCV=1. Then run make.
 2) Set environment variable DARKNET_HOME to download location of darknet.
 3) Add DARKNET_HOME to LD_LIBRARY_PATH. `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DARKNET_HOME`
 4) Run `python3 setup.py build_ext --inplace`

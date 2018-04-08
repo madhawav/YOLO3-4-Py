@@ -29,5 +29,9 @@ ext_modules=[
 setup(
   name = 'PyDarknet',
   cmdclass={'build_ext': build_ext},
-  ext_modules = ext_modules
+  ext_modules = ext_modules,
+  install_requires=[
+      'cython>=0.27',
+      'pkgconfig'
+  ]
 )
