@@ -8,6 +8,9 @@ if __name__ == "__main__":
 
     input_files = os.listdir("input")
     for file_name in input_files:
+        if not file_name.lower().endswith(".jpg"):
+            continue
+
         print("File:", file_name)
         img = cv2.imread(os.path.join("input",file_name))
         img2 = Image(img)
