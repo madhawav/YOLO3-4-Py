@@ -5,6 +5,7 @@ from pydarknet import Detector, Image
 import cv2
 
 if __name__ == "__main__":
+    average_time = 0
 
     net = Detector(bytes("cfg/yolov3.cfg", encoding="utf-8"), bytes("weights/yolov3.weights", encoding="utf-8"), 0,
                    bytes("cfg/coco.data", encoding="utf-8"))
@@ -23,7 +24,9 @@ if __name__ == "__main__":
             del dark_frame
 
             end_time = time.time()
-            print("Elapsed Time:",end_time-start_time)
+            average_time = average_time * 0.8 + (end_time-start_time) * 0.2
+
+            print("Efficiency:", net._get_average_time()/average_time)
 
             for cat, score, bounds in results:
                 x, y, w, h = bounds
@@ -31,6 +34,7 @@ if __name__ == "__main__":
                 cv2.putText(frame, str(cat.decode("utf-8")), (int(x), int(y)), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 0))
 
             cv2.imshow("preview", frame)
+
 
         k = cv2.waitKey(1)
         if k == 0xFF & ord("q"):
