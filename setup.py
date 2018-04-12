@@ -16,8 +16,8 @@ include_paths = [np.get_include(), os.path.join(darknet_dir,"include"), os.path.
 libraries = ["darknet", "m", "pthread"]
 library_paths = [darknet_dir]
 
-extra_compiler_flags = [pkgconfig.cflags("opencv"), pkgconfig.cflags("python3")]
-extra_linker_flags = [pkgconfig.libs("opencv"),pkgconfig.libs("python3")]
+extra_compiler_flags = [pkgconfig.cflags("python3")]
+extra_linker_flags = [pkgconfig.libs("python3")]
 
 ext_modules=[
     Extension("pydarknet", ["pydarknet.pyx", "pydarknet.pxd", "bridge.cpp"], include_dirs=include_paths, language="c++",
