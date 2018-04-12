@@ -23,5 +23,8 @@ if __name__ == "__main__":
 
     cv2.imshow("output", img)
     # img2 = pydarknet.load_image(img)
-
-    cv2.waitKey(0)
+    
+     # Allow to easily exit the process with Ctrl+C 
+    while True:
+        cv2.waitKey(50)
+        
