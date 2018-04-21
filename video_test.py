@@ -36,7 +36,6 @@ if __name__ == "__main__":
             average_time = average_time * 0.8 + (end_time-start_time) * 0.2
 
             print("Total Time:", end_time-start_time, ":", average_time)
-            print("Efficiency:", net._get_average_time()/average_time)
 
             for cat, score, bounds in results:
                 x, y, w, h = bounds
