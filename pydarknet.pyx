@@ -3,25 +3,53 @@
 import numpy as np
 
 from libc.string cimport memcpy
+from libc.stdlib cimport malloc
+
+is_compiled_with_opencv = bool(USE_CV)
 
 cdef class Image:
     cdef image img;
-
     def __cinit__(self, np.ndarray ary):
-        # Code adapted from https://github.com/solivr/cython_opencvMat
-        assert ary.ndim==3 and ary.shape[2]==3, "ASSERT::3channel RGB only!!"
+        IF USE_CV == 1:
+            # Code adapted from https://github.com/solivr/cython_opencvMat
+            assert ary.ndim==3 and ary.shape[2]==3, "ASSERT::3channel RGB only!!"
 
-        cdef np.ndarray[np.uint8_t, ndim=3, mode ='c'] np_buff = np.ascontiguousarray(ary, dtype=np.uint8)
-        cdef unsigned int* im_buff = <unsigned int*> np_buff.data
-        cdef int r = ary.shape[0]
-        cdef int c = ary.shape[1]
-        cdef Mat m
-        m.create(r, c, CV_8UC3)
-        memcpy(m.data, im_buff, r*c*3)
-        # End of adapted code block
+            cdef np.ndarray[np.uint8_t, ndim=3, mode ='c'] np_buff = np.ascontiguousarray(ary, dtype=np.uint8)
+            cdef unsigned int* im_buff = <unsigned int*> np_buff.data
+            cdef int r = ary.shape[0]
+            cdef int c = ary.shape[1]
+            cdef Mat m
+            m.create(r, c, CV_8UC3)
+            memcpy(m.data, im_buff, r*c*3)
+            # End of adapted code block
 
-        self.img = get_darknet_image(m)
-        m.release()
+            self.img = get_darknet_image(m)
+            m.release()
+        ELSE:
+             # Code adapted from https://github.com/solivr/cython_opencvMat
+            assert ary.ndim==3 and ary.shape[2]==3, "ASSERT::3channel RGB only!!"
+
+            # Re-arrange to suite Darknet input format
+            ary = ary.transpose(2, 0, 1)
+
+            # RGB to BGR
+            ary = ary[::-1,:,:]
+
+            # 0..1 Range
+            ary = ary/255.0
+
+            # To c_array
+            cdef np.ndarray[np.float32_t, ndim=3, mode ='c'] np_buff = np.ascontiguousarray(ary, dtype=np.float32)
+            cdef int c = ary.shape[0]
+            cdef int h = ary.shape[1]
+            cdef int w = ary.shape[2]
+
+            # Copy to Darknet image
+            self.img.w = w
+            self.img.h = h
+            self.img.c = c
+            self.img.data = <float*>malloc(h*w*c*4)
+            memcpy(self.img.data, np_buff.data, h*w*c*4)
 
     def show_image(self, char* title):
         show_image(self.img, title)
