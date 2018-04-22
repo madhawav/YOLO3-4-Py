@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 
 USE_CV = True
 
-if "NO_OPENCV" in os.environ and int(os.environ["NO_OPENCV"]) == 1:
+if "OPENCV" in os.environ and int(os.environ["OPENCV"]) == 0:
     logging.info("Compiling without OpenCV")
     USE_CV = False
 
@@ -32,19 +32,22 @@ extra_compiler_flags = [ pkgconfig.cflags("python3")]
 extra_linker_flags = [pkgconfig.libs("python3")]
 
 cython_compile_directives = {}
+macros = []
 
 if USE_CV:
     extra_linker_flags.append(pkgconfig.cflags("opencv"))
     extra_linker_flags.append(pkgconfig.libs("opencv"))
     cython_compile_directives["USE_CV"] = 1
+    macros.append(("USE_CV", 1))
 else:
     cython_compile_directives["USE_CV"] = 0
+    macros.append(("USE_CV", 0))
 
 ext_modules=[
     Extension("pydarknet", ["pydarknet.pyx", "pydarknet.pxd", "bridge.cpp"], include_dirs=include_paths, language="c++",
               libraries=libraries, library_dirs=library_paths,   extra_link_args=extra_linker_flags,
-              cython_compile_time_env=cython_compile_directives,
-              extra_compile_args=extra_compiler_flags),
+              cython_compile_time_env=cython_compile_directives, define_macros = macros,
+              extra_compile_args=extra_compiler_flags)
 ]
 
 class CustomClean(clean):

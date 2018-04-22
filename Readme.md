@@ -16,7 +16,7 @@ More details are available at https://github.com/pjreddie/darknet/issues/502
 ```
 
 ```
-NOTE: It is possible to build yolo3-4-py without OpenCV by setting the environment variable NO_OPENCV=1.
+NOTE: It is possible to build yolo3-4-py without OpenCV by setting the environment variable OPENCV=0.
 ```
 ## How to run using docker?
 1) Navigate to [docker](/docker) directory.
