@@ -15,7 +15,7 @@ else:
     use_cython = True
 
 from setuptools import setup, Extension
-from util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages
+from util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages, get_readme
 import logging
 import os
 
@@ -195,10 +195,11 @@ cmd_class = {'clean': CustomClean, "build": CustomBuild, "build_ext": CustomBuil
 
 setup(
   name = name,
-  description="Python wrapper on YOLO 3.0 implementation by original authors 'pjreddie/darknet' (https://pjreddie.com/yolo)",
-  long_description="This is a Python wrapper on YOLO 3.0 implementation provided by original authors of YOLO 3.0.",
+  description="Python wrapper on YOLO 3.0 implementation by 'pjreddie': (https://pjreddie.com/yolo)",
+  long_description=get_readme(),
+  long_description_content_type="text/markdown",
   cmdclass= cmd_class,
-  version='0.1.rc4',
+  version='0.1.rc10',
   ext_modules = ext_modules,
   platforms=["linux-x86_64"],
   setup_requires=[
@@ -218,5 +219,18 @@ setup(
   package_dir={"__libdarknet": "__libdarknet"},
   packages=["__libdarknet"],
   include_package_data=True,
-  license="YOLO34Py wrapper is under Apache 2.0. Darknet is Public Domain."
+  license="YOLO34Py wrapper is under Apache 2.0. Darknet is Public Domain.",
+  classifiers=[
+      'Development Status :: 4 - Beta',
+      'License :: OSI Approved :: Apache Software License',
+      'Programming Language :: Python :: 3.5',
+      'Programming Language :: Python :: 3.6',
+      'Programming Language :: Python :: 3.7',
+      'Topic :: Text Processing :: Linguistic',
+      'Operating System :: POSIX :: Linux',
+      'Intended Audience :: Science/Research',
+      'Topic :: Scientific/Engineering :: Artificial Intelligence'
+  ],
+  keywords="yolo darknet object detection vision",
+
 )

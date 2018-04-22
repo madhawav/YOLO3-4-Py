@@ -82,3 +82,7 @@ def get_libs(package):
     out, err = proc.communicate()
 
     return out.rstrip().decode('utf-8')
+
+def get_readme():
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"pypi_readme.md"),"r") as f:
+        return f.read()
