@@ -7,14 +7,17 @@ Image source: http://absfreepic.com/free-photos/download/crowded-cars-on-street-
 ## Pre-requisites
 1) Python 3.5
 2) Numpy, cython and pkgconfig `pip3 install numpy cython pkgconfig`
-3) OpenCV 3.x with Python bindings. (Tested on OpenCV 3.4.0)
+3) Optionally, OpenCV 3.x with Python bindings. (Tested on OpenCV 3.4.0)
     - You can use [this script](tools/install_opencv34.sh) to automate Open CV 3.4 installation (Tested on Ubuntu 16.04).
-
+    - It is possible to compile YOLO3-4-Py without OpenCV. (Performance of this approach is less.)
 ```
 NOTE: OpenCV 3.4.1 has a bug which causes Darknet to fail. Therefore this wrapper would not work with OpenCV 3.4.1.
 More details are available at https://github.com/pjreddie/darknet/issues/502
 ```
 
+```
+NOTE: It is possible to build yolo3-4-py without OpenCV by setting the environment variable NO_OPENCV=1.
+```
 ## How to run using docker?
 1) Navigate to [docker](/docker) directory.
 2) Copy sample images into the `input` directory. Or else run [input/download_sample_images.sh](docker/input/download_sample_images.sh)
