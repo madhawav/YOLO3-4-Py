@@ -4,10 +4,11 @@ import os
 import zipfile
 import shutil
 import logging
+import sys
 
 logging.basicConfig(level=logging.INFO)
 
-def build_darknet(darknet_dir, branch_name):
+def build_darknet(darknet_dir, branch_name, target_location):
     '''
     Utility method to download and install darknet
     :param download_path:
@@ -38,8 +39,8 @@ def build_darknet(darknet_dir, branch_name):
     else:
         return False
 
-    logging.info("Moving to __libdarknet/")
-    shutil.move(os.path.join(download_path,"darknet-"+branch_name+"/libdarknet.so"), os.path.join(os.path.dirname(__file__),"__libdarknet","libdarknet.so"))
+    logging.info("Moving to " + target_location)
+    shutil.move(os.path.join(download_path,"darknet-"+branch_name+"/libdarknet.so"), target_location)
 
     return True
 
@@ -65,6 +66,10 @@ def get_cflags(package):
 
     return out.rstrip().decode('utf-8')
 
+
+def find_site_packages():
+    site_packages = [p for p in sys.path if p.endswith("site-packages") or p.endswith("site-packages/")]
+    return site_packages
 
 def get_libs(package):
     call_name = "pkg-config"

@@ -2,13 +2,20 @@ import tempfile
 from distutils.command.build import build
 from distutils.command.clean import clean
 import sys
-import numpy as np
+import numpy as np # TODO: Need a mechanism to ensure numpy is already installed
 import shutil
 
-from Cython.Distutils import build_ext
+# Compile using .cpp files if cython is not present
+try:
+    from Cython.Distutils import build_ext
+except ImportError:
+    from distutils.command.build_ext import build_ext
+    use_cython = False
+else:
+    use_cython = True
 
 from setuptools import setup, Extension
-from util import build_darknet, clean_darknet, get_cflags, get_libs
+from util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages
 import logging
 import os
 
@@ -57,10 +64,6 @@ else:
 if "DARKNET_HOME" not in os.environ:
     logging.info("Selected Darknet Branch: " + build_branch_name+ " from Darknet Fork 'https://github.com/madhawav/darknet/'")
 
-def find_site_packages():
-    site_packages = [p for p in sys.path if p.endswith("site-packages") or p.endswith("site-packages/")]
-    return site_packages
-
 
 temp_dir =  os.path.join(tempfile.gettempdir(), "darknet") # Temp directory to build darknet
 
@@ -73,7 +76,7 @@ else:
 
 include_paths = [np.get_include(), os.path.join(darknet_dir,"include"), os.path.join(darknet_dir,"src")]
 libraries = ["darknet","m", "pthread"]
-library_paths = ["./__libdarknet"]
+library_paths = [".", "./__libdarknet"]
 
 extra_compiler_flags = [ get_cflags("python3")]
 extra_linker_flags = [get_libs("python3")]
@@ -98,38 +101,51 @@ for site_package in find_site_packages():
 if "--inplace" in sys.argv:
     extra_linker_flags.append("-Wl,-rpath,.")  # Added to make test code work
 
-pydarknet_extension = Extension("pydarknet", ["pydarknet.pyx", "pydarknet.pxd", "bridge.cpp"], include_dirs=include_paths, language="c++",
-              libraries=libraries, library_dirs=library_paths,   extra_link_args=extra_linker_flags,
-              extra_compile_args=extra_compiler_flags, define_macros = macros)
+if use_cython:
+    pydarknet_extension = Extension("pydarknet", ["pydarknet.pyx", "pydarknet.pxd", "bridge.cpp"], include_dirs=include_paths, language="c++",
+                  libraries=libraries, library_dirs=library_paths,   extra_link_args=extra_linker_flags,
+                  extra_compile_args=extra_compiler_flags, define_macros = macros)
 
-# Pass macros to Cython
-pydarknet_extension.cython_compile_time_env = cython_compile_directives
+    # Pass macros to Cython
+    pydarknet_extension.cython_compile_time_env = cython_compile_directives
+else:
+    pydarknet_extension = Extension("pydarknet", ["pydarknet.cpp", "bridge.cpp"],
+                                    include_dirs=include_paths, language="c++",
+                                    libraries=libraries, library_dirs=library_paths, extra_link_args=extra_linker_flags,
+                                    extra_compile_args=extra_compiler_flags, define_macros=macros)
+
+    # NOTE: It is assumed that pydarknet.cpp is already generated using pydarknet.py. It is also assumed that USE_CV
+    # flag is unchanged between cythonize and current compilation.
 
 ext_modules=[
     pydarknet_extension
 ]
 
 darknet_setup_done = False
+
 def setup_darknet():
+    '''
+    Configures darknet on which the wrapper works
+    :return:
+    '''
     global darknet_setup_done
     if darknet_setup_done:
         return
+
+    target_location = os.path.join(os.path.dirname(os.path.abspath(__file__)), "__libdarknet", "libdarknet.so")
+
+    if "--inplace" in sys.argv:
+        logging.info("For inplace compilations, target location is set to root")
+        target_location =  os.path.join(os.path.dirname(os.path.abspath(__file__)), "libdarknet.so")
+
     if "DARKNET_HOME" not in os.environ:
         # If user has not specified DARKNET_HOME, we will download and build darknet.
-        build_darknet(temp_dir, build_branch_name)
+        build_darknet(temp_dir, build_branch_name, target_location)
     else:
         logging.info("Copying libdarknet.so from " + os.environ["DARKNET_HOME"])
         # If user has set DARKNET_HOME, it is assumed that he has built darknet. We will copy libdarknet.so from users location to site-pacakges/__libdarknet
         shutil.copyfile(os.path.join(os.environ["DARKNET_HOME"], "libdarknet.so"),
-                        os.path.join(os.path.dirname(__file__), "__libdarknet", "libdarknet.so"))
-
-    if "--inplace" in sys.argv:
-        logging.info("Adding symlink to support tests in place")
-        if os.path.islink(os.path.join(os.path.dirname(__file__), "libdarknet.so")):
-            os.unlink(os.path.join(os.path.dirname(__file__), "libdarknet.so"))
-        # Added to make test code work
-        os.symlink(os.path.join(os.path.dirname(__file__), "__libdarknet", "libdarknet.so"),
-                   os.path.join(os.path.dirname(__file__), "libdarknet.so"))
+                        target_location)
 
     darknet_setup_done = True
 
@@ -153,10 +169,9 @@ class CustomClean(clean):
             logging.info("removing __libdarknet/libdarknet.so")
             os.remove(os.path.join(os.path.dirname(__file__),"__libdarknet","libdarknet.so"))
 
-        print(os.path.join(os.path.dirname(os.path.abspath(__file__)), "libdarknet.so"))
-        if os.path.islink(os.path.join(os.path.dirname(os.path.abspath(__file__)), "libdarknet.so")):
-            logging.info("removing symlink libdarknet.so")
-            os.unlink(os.path.join(os.path.dirname(os.path.abspath(__file__)),"libdarknet.so"))
+        if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "libdarknet.so")):
+            logging.info("removing libdarknet.so")
+            os.remove(os.path.join(os.path.dirname(os.path.abspath(__file__)),"libdarknet.so"))
 
         if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)),"pydarknet.cpp")):
             logging.info("removing pydarknet.cpp")
@@ -175,12 +190,15 @@ if USE_GPU:
 else:
     name = "yolo34py"
 
+cmd_class = {'clean': CustomClean, "build": CustomBuild, "build_ext": CustomBuildExt}
+
+
 setup(
   name = name,
   description="Python wrapper on YOLO 3.0 implementation by original authors 'pjreddie/darknet' (https://pjreddie.com/yolo)",
   long_description="This is a Python wrapper on YOLO 3.0 implementation provided by original authors of YOLO 3.0.",
-  cmdclass={'build_ext': CustomBuildExt, 'clean': CustomClean, "build": CustomBuild},
-  version='0.1.rc3',
+  cmdclass= cmd_class,
+  version='0.1.rc4',
   ext_modules = ext_modules,
   platforms=["linux-x86_64"],
   setup_requires=[
