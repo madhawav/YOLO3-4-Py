@@ -1,4 +1,6 @@
-#include <opencv2/opencv.hpp>
+#if USE_CV == 1
+    #include <opencv2/opencv.hpp>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,5 +14,7 @@ extern "C" {
 #endif
 
 
-using namespace cv;
-image get_darknet_image(const Mat &input);
+#if USE_CV == 1
+    using namespace cv;
+    image get_darknet_image(const Mat &input);
+#endif

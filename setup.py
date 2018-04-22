@@ -77,13 +77,16 @@ extra_compiler_flags = [ pkgconfig.cflags("python3")]
 extra_linker_flags = [pkgconfig.libs("python3")]
 
 cython_compile_directives = {}
+macros = []
 
 if USE_CV:
     extra_linker_flags.append(pkgconfig.cflags("opencv"))
     extra_linker_flags.append(pkgconfig.libs("opencv"))
     cython_compile_directives["USE_CV"] = 1
+    macros.append(("USE_CV", 1))
 else:
     cython_compile_directives["USE_CV"] = 0
+    macros.append(("USE_CV", 0))
 
 
 # Add linker flag to search in site_packages/__libdarknet. libdarknet.so is located at this location.

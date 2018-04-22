@@ -1,8 +1,12 @@
+#include "bridge.h"
+
+#if USE_CV == 1
+
 #include <iostream>
 
 #include <stdio.h>
 
-#include "bridge.h"
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,3 +41,5 @@ image get_darknet_image(const Mat &input){
     cvReleaseImage(&iplImage);
     return darknet_image;
 }
+
+#endif
