@@ -1,6 +1,6 @@
+import shlex
 import subprocess
 import os
-import requests
 import zipfile
 import shutil
 import logging
@@ -13,6 +13,7 @@ def build_darknet(darknet_dir, branch_name):
     :param download_path:
     :return:
     '''
+    import requests
     download_path = darknet_dir
     logging.info("Temp Path: "+ download_path)
 
@@ -49,3 +50,30 @@ def clean_darknet(darknet_path):
     :return:
     '''
     shutil.rmtree(darknet_path,ignore_errors=True)
+
+
+# Code based on https://github.com/matze/pkgconfig
+def get_cflags(package):
+    call_name = "pkg-config"
+    if 'PKG_CONFIG' in os.environ:
+        call_name = "pkg-config"
+
+    command = call_name + " --cflags " + package
+
+    proc = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate()
+
+    return out.rstrip().decode('utf-8')
+
+
+def get_libs(package):
+    call_name = "pkg-config"
+    if 'PKG_CONFIG' in os.environ:
+        call_name = "pkg-config"
+
+    command = call_name + " --libs " + package
+
+    proc = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate()
+
+    return out.rstrip().decode('utf-8')

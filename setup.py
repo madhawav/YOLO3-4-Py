@@ -1,18 +1,14 @@
 import tempfile
-
+from distutils.command.build import build
 from distutils.command.clean import clean
-import pkgconfig
-import numpy as np
 import sys
+import numpy as np
 import shutil
 
 from Cython.Distutils import build_ext
 
-from distutils.command.build_py import build_py
-
 from setuptools import setup, Extension
-
-from darknet_loader import build_darknet, clean_darknet
+from util import build_darknet, clean_darknet, get_cflags, get_libs
 import logging
 import os
 
@@ -41,19 +37,25 @@ elif "OPENCV" in os.environ and int(os.environ["OPENCV"]) == 1:
     logging.info("Compiling wrapper with OpenCV")
     USE_CV = True
 
-if USE_CV & (pkgconfig.libs("opencv") == '' or pkgconfig.cflags("opencv") == ''):
+if USE_CV & (get_libs("opencv") == '' or get_cflags("opencv") == ''):
     logging.warning("OpenCV is not configured. Compiling wrapper without OpenCV!")
     USE_CV = False
 
 
 if USE_GPU:
-    build_branch_name = "yolo34py-intergration"
+    if USE_CV:
+        build_branch_name = "yolo34py-intergration"
+    else:
+        build_branch_name = "yolo34py-intergration-nocv"
 else:
     build_branch_name = "yolo34py-intergration-nogpu"
     if "DARKNET_HOME" not in os.environ:
         if USE_CV:
             logging.warning("Non GPU darknet branch is used. Compiling wrapper without OpenCV!")
         USE_CV = False # OpenCV requires yolo34py-intergration branch which has OpenCV enabled
+
+if "DARKNET_HOME" not in os.environ:
+    logging.info("Selected Darknet Branch: " + build_branch_name+ " from Darknet Fork 'https://github.com/madhawav/darknet/'")
 
 def find_site_packages():
     site_packages = [p for p in sys.path if p.endswith("site-packages") or p.endswith("site-packages/")]
@@ -73,15 +75,15 @@ include_paths = [np.get_include(), os.path.join(darknet_dir,"include"), os.path.
 libraries = ["darknet","m", "pthread"]
 library_paths = ["./__libdarknet"]
 
-extra_compiler_flags = [ pkgconfig.cflags("python3")]
-extra_linker_flags = [pkgconfig.libs("python3")]
+extra_compiler_flags = [ get_cflags("python3")]
+extra_linker_flags = [get_libs("python3")]
 
 cython_compile_directives = {}
 macros = []
 
 if USE_CV:
-    extra_linker_flags.append(pkgconfig.cflags("opencv"))
-    extra_linker_flags.append(pkgconfig.libs("opencv"))
+    extra_compiler_flags.append(get_cflags("opencv"))
+    extra_linker_flags.append(get_libs("opencv"))
     cython_compile_directives["USE_CV"] = 1
     macros.append(("USE_CV", 1))
 else:
@@ -98,7 +100,7 @@ if "--inplace" in sys.argv:
 
 pydarknet_extension = Extension("pydarknet", ["pydarknet.pyx", "pydarknet.pxd", "bridge.cpp"], include_dirs=include_paths, language="c++",
               libraries=libraries, library_dirs=library_paths,   extra_link_args=extra_linker_flags,
-              extra_compile_args=extra_compiler_flags)
+              extra_compile_args=extra_compiler_flags, define_macros = macros)
 
 # Pass macros to Cython
 pydarknet_extension.cython_compile_time_env = cython_compile_directives
@@ -123,19 +125,19 @@ def setup_darknet():
 
     if "--inplace" in sys.argv:
         logging.info("Adding symlink to support tests in place")
-        if os.path.exists(os.path.join(os.path.dirname(__file__), "libdarknet.so")):
-            os.remove(os.path.join(os.path.dirname(__file__), "libdarknet.so"))
+        if os.path.islink(os.path.join(os.path.dirname(__file__), "libdarknet.so")):
+            os.unlink(os.path.join(os.path.dirname(__file__), "libdarknet.so"))
         # Added to make test code work
         os.symlink(os.path.join(os.path.dirname(__file__), "__libdarknet", "libdarknet.so"),
                    os.path.join(os.path.dirname(__file__), "libdarknet.so"))
 
     darknet_setup_done = True
 
-class CustomBuildPy(build_py):
+class CustomBuild(build):
     def run(self):
         # This is triggered when src distribution is made. Not triggered for build_ext.
         setup_darknet()
-        build_py.run(self)
+        build.run(self)
 
 class CustomBuildExt(build_ext):
     def run(self):
@@ -152,8 +154,7 @@ class CustomClean(clean):
             os.remove(os.path.join(os.path.dirname(__file__),"__libdarknet","libdarknet.so"))
 
         print(os.path.join(os.path.dirname(os.path.abspath(__file__)), "libdarknet.so"))
-        if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "libdarknet.so")):
-
+        if os.path.islink(os.path.join(os.path.dirname(os.path.abspath(__file__)), "libdarknet.so")):
             logging.info("removing symlink libdarknet.so")
             os.unlink(os.path.join(os.path.dirname(os.path.abspath(__file__)),"libdarknet.so"))
 
@@ -178,15 +179,21 @@ setup(
   name = name,
   description="Python wrapper on YOLO 3.0 implementation by original authors 'pjreddie/darknet' (https://pjreddie.com/yolo)",
   long_description="This is a Python wrapper on YOLO 3.0 implementation provided by original authors of YOLO 3.0.",
-  cmdclass={'build_ext': CustomBuildExt, 'clean': CustomClean, "build_py": CustomBuildPy},
-  version='0.1.2rc',
+  cmdclass={'build_ext': CustomBuildExt, 'clean': CustomClean, "build": CustomBuild},
+  version='0.1.rc3',
   ext_modules = ext_modules,
   platforms=["linux-x86_64"],
+  setup_requires=[
+      'cython>=0.27',
+      'request',
+      'numpy'
+  ],
   install_requires=[
       'cython>=0.27',
-      'pkgconfig',
-      'request'
+      'request',
+      'numpy'
   ],
+  python_requires='>=3.5',
   author='Madhawa Vidanapathirana',
   author_email='madhawavidanapathirana@gmail.com',
   url="https://github.com/madhawav/YOLO3-4-Py",
