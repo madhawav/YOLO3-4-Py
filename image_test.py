@@ -1,4 +1,3 @@
-import pydarknet
 from pydarknet import Detector, Image
 import cv2
 import os

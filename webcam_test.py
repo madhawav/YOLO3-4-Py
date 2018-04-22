@@ -1,6 +1,5 @@
 import time
 
-import pydarknet
 from pydarknet import Detector, Image
 import cv2
 
