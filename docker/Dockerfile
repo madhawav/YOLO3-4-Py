@@ -23,7 +23,7 @@ RUN cmake -DBUILD_EXAMPLES=OFF ..
 RUN make -j4
 RUN make install
 RUN ldconfig
-
+RUN ldconfig
 ## Downloading and compiling darknet ##
 WORKDIR /
 RUN apt-get install -y git

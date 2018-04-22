@@ -3,21 +3,24 @@ import os
 import requests
 import zipfile
 import shutil
+import logging
 
-def build_darknet(darknet_dir):
+logging.basicConfig(level=logging.INFO)
+
+def build_darknet(darknet_dir, branch_name):
     '''
     Utility method to download and install darknet
     :param download_path:
     :return:
     '''
     download_path = darknet_dir
-    print("Temp Path:", download_path)
+    logging.info("Temp Path: "+ download_path)
 
-    print("Downloading darknet")
+    logging.info("Downloading darknet")
     os.makedirs(download_path, exist_ok=True)
-    response = requests.get('https://github.com/madhawav/darknet/archive/yolo34py-intergration.zip')
+    response = requests.get('https://github.com/madhawav/darknet/archive/'+branch_name+'.zip')
 
-    print("Extracting darknet")
+    logging.info("Extracting darknet")
     with open(os.path.join(download_path,"darknet.zip"), "wb") as f:
         f.write(response.content)
 
@@ -27,15 +30,15 @@ def build_darknet(darknet_dir):
 
     os.remove(os.path.join(download_path, "darknet.zip"))
 
-    print("Building darknet")
-    build_ret = subprocess.Popen("make", shell=True, stdout=subprocess.PIPE, cwd=os.path.join(download_path,"darknet-yolo34py-intergration"))
+    logging.info("Building darknet")
+    build_ret = subprocess.Popen("make", shell=True, stdout=subprocess.PIPE, cwd=os.path.join(download_path,"darknet-"+branch_name))
     if build_ret.wait() == 0:
-        print("Darknet building successful")
+        logging.info("Darknet building successful")
     else:
         return False
 
-    print("Moving to __libdarknet/")
-    shutil.move(os.path.join(download_path,"darknet-yolo34py-intergration/libdarknet.so"), os.path.join(os.path.dirname(__file__),"__libdarknet","libdarknet.so"))
+    logging.info("Moving to __libdarknet/")
+    shutil.move(os.path.join(download_path,"darknet-"+branch_name+"/libdarknet.so"), os.path.join(os.path.dirname(__file__),"__libdarknet","libdarknet.so"))
 
     return True
 
