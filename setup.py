@@ -15,14 +15,14 @@ else:
     use_cython = True
 
 from setuptools import setup, Extension
-from util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages, get_readme
+from util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages, get_readme, find_dist_packages
 import logging
 import os
 
 logging.basicConfig(level=logging.INFO)
 
 # Default configuration
-USE_GPU = False
+USE_GPU = True
 USE_CV = False
 
 if "GPU" in os.environ:
@@ -97,6 +97,9 @@ else:
 # Add linker flag to search in site_packages/__libdarknet. libdarknet.so is located at this location.
 for site_package in find_site_packages():
     extra_linker_flags.append("-Wl,-rpath," + os.path.join(site_package,"__libdarknet"))
+
+for dist_package in find_dist_packages():
+    extra_linker_flags.append("-Wl,-rpath," + os.path.join(dist_package,"__libdarknet"))
 
 if "--inplace" in sys.argv:
     extra_linker_flags.append("-Wl,-rpath,.")  # Added to make test code work
@@ -199,17 +202,17 @@ setup(
   long_description=get_readme(),
   long_description_content_type="text/markdown",
   cmdclass= cmd_class,
-  version='0.1.rc10',
+  version='0.1.rc12',
   ext_modules = ext_modules,
   platforms=["linux-x86_64"],
   setup_requires=[
       'cython>=0.27',
-      'request',
+      'requests',
       'numpy'
   ],
   install_requires=[
       'cython>=0.27',
-      'request',
+      'requests',
       'numpy'
   ],
   python_requires='>=3.5',

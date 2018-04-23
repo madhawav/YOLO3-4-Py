@@ -71,6 +71,10 @@ def find_site_packages():
     site_packages = [p for p in sys.path if p.endswith("site-packages") or p.endswith("site-packages/")]
     return site_packages
 
+def find_dist_packages():
+    dist_packages = [p for p in sys.path if p.endswith("dist-packages") or p.endswith("dist-packages/")]
+    return dist_packages
+
 def get_libs(package):
     call_name = "pkg-config"
     if 'PKG_CONFIG' in os.environ:
