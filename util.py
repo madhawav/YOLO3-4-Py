@@ -34,6 +34,13 @@ def build_darknet(darknet_dir, branch_name, target_location):
 
     logging.info("Building darknet")
     build_ret = subprocess.Popen("make", shell=True, stdout=subprocess.PIPE, cwd=os.path.join(download_path,"darknet-"+branch_name))
+
+    for line in iter(build_ret.stdout.readline, ''):
+        if len(line) != 0:
+            logging.info(line.rstrip())
+        else:
+            break
+
     if build_ret.wait() == 0:
         logging.info("Darknet building successful")
     else:
