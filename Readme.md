@@ -61,3 +61,10 @@ To get best performance, it is recommended to install from source with OpenCV en
 1) Set environment variable DARKNET_HOME to download location of darknet.
 2) Add DARKNET_HOME to LD_LIBRARY_PATH. `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DARKNET_HOME`
 3) Continue instructions for _installation from source_.
+
+## Having trouble? 
+Kindly raise your issues in the issues section of GitHub repository.
+
+## Like to contribute?
+Feel free to send PRs or discuss on possible future improvements in issues section. 
+Your contributions are most welcome!
