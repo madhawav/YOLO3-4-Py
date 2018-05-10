@@ -22,7 +22,7 @@ import os
 logging.basicConfig(level=logging.INFO)
 
 # Default configuration
-USE_GPU = True
+USE_GPU = False
 USE_CV = False
 
 if "GPU" in os.environ:

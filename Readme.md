@@ -39,12 +39,12 @@ NOTE: PyPI Deployments does not use OpenCV due to complexity involved in install
 To get best performance, it is recommended to install from source with OpenCV enabled.
 ```
 
-## How to run tests in local machine?
+## How to demos in local machine?
 1) If you have not installed already, run `python3 setup.py build_ext --inplace` to install library locally.
 2) Download "yolov3" model file and config files using `sh download_models.sh`.
-3) Run `python3 webcam_test.py`, `python3 video_test.py` or `python3 test.py`
+3) Run `python3 webcam_demo.py`, `python3 video_demo.py` or `python3 image_demo.py`
 
-## How to run tests using docker?
+## How to run demo using docker?
 1) Navigate to [docker](/docker) directory.
 2) Copy sample images into the `input` directory. Or else run [input/download_sample_images.sh](docker/input/download_sample_images.sh)
 3) Run `sh run.sh`
@@ -55,7 +55,7 @@ To get best performance, it is recommended to install from source with OpenCV en
  - To enable GPU acceleration, `export GPU=1`.
  - To enable OpenCV, `export OPENCV=1`
  
-2) Run `python3 setup.py install` to install library.
+2) Navigate to source root and run `pip3 install .` to install library.
 
 ### Using a custom version of Darknet
 1) Set environment variable DARKNET_HOME to download location of darknet.
