@@ -55,7 +55,7 @@ To get best performance, it is recommended to install from source with OpenCV en
  - To enable GPU acceleration, `export GPU=1`.
  - To enable OpenCV, `export OPENCV=1`
  
-2) Run `python3 setup.py install` to install library.
+2) Navigate to source root and run `pip3 install .` to install library.
 
 ### Using a custom version of Darknet
 1) Set environment variable DARKNET_HOME to download location of darknet.
