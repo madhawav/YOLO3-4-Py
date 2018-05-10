@@ -1,8 +1,9 @@
 # YOLO3-4-Py
-[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0rc10-blue.svg)](https://pypi.org/project/yolo34py)
-[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0rc10--gpu-blue.svg)](https://pypi.org/project/yolo34py-gpu)
+[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0rc12-blue.svg)](https://pypi.org/project/yolo34py)
+[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0rc12--gpu-blue.svg)](https://pypi.org/project/yolo34py-gpu)
 
 A Python wrapper on [Darknet](https://github.com/pjreddie/darknet). Compatible with latest [YOLO V3](https://pjreddie.com/darknet/yolo).
+YOLO 3.0 is a real-time Object Detector by [pjreddie](https://pjreddie.com/).
 
 ![OutputImage](doc/output.jpg)
 Image source: http://absfreepic.com/free-photos/download/crowded-cars-on-street-4032x2272_48736.html
@@ -13,7 +14,7 @@ Image source: http://absfreepic.com/free-photos/download/crowded-cars-on-street-
 3) Cython `pip3 install cython`
 4) Optionally, OpenCV 3.x with Python bindings. (Tested on OpenCV 3.4.0)
     - You can use [this script](tools/install_opencv34.sh) to automate Open CV 3.4 installation (Tested on Ubuntu 16.04).
-    - It is possible to compile YOLO3-4-Py without OpenCV. (Performance of this approach is less.)
+    - Performance of this approach is better than not using OpenCV.
     - Installations from PyPI distributions does not use OpenCV.
 ```
 NOTE: OpenCV 3.4.1 has a bug which causes Darknet to fail. Therefore this wrapper would not work with OpenCV 3.4.1.
