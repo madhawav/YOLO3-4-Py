@@ -84,6 +84,17 @@ extra_linker_flags = [get_libs("python3")]
 cython_compile_directives = {}
 macros = []
 
+if USE_GPU:
+    if "CUDA_HOME" in os.environ:
+        include_paths.append(os.path.join(os.environ["CUDA_HOME"],"include"))
+    else:
+        raise Exception("Environment variable CUDA_HOME not set")
+    cython_compile_directives["USE_GPU"] = 1
+    macros.append(("USE_GPU", 1))
+else:
+    cython_compile_directives["USE_GPU"] = 0
+    macros.append(("USE_GPU", 0))
+
 if USE_CV:
     extra_compiler_flags.append(get_cflags("opencv"))
     extra_linker_flags.append(get_libs("opencv"))

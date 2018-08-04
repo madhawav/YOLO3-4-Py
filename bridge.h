@@ -2,6 +2,12 @@
     #include <opencv2/opencv.hpp>
 #endif
 
+#if USE_GPU == 1
+    // Set GPU tag so darknet.h is imported with GPU features
+    #define GPU
+    #include <cuda_runtime.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

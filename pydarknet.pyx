@@ -5,7 +5,12 @@ import numpy as np
 from libc.string cimport memcpy
 from libc.stdlib cimport malloc
 
+is_compiled_with_gpu = bool(USE_GPU)
 is_compiled_with_opencv = bool(USE_CV)
+
+IF USE_GPU == 1:
+    def set_cuda_device(n):
+        cuda_set_device(n)
 
 cdef class Image:
     cdef image img;

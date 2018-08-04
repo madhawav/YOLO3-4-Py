@@ -59,3 +59,6 @@ cdef extern from "bridge.h":
     void free_image(image img)
 
     detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num)
+
+    IF USE_GPU == 1:
+        void cuda_set_device(int n)
