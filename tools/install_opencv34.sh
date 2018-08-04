@@ -21,7 +21,7 @@ rm 3.4.0.zip
 
 cd opencv-3.4.0
 mkdir build
-cd opencv-3.4.0/build
+cd build
 cmake -DBUILD_EXAMPLES=OFF ..
 make -j4
 sudo make install
