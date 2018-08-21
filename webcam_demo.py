@@ -4,6 +4,8 @@ from pydarknet import Detector, Image
 import cv2
 
 if __name__ == "__main__":
+    # Optional statement to configure preferred GPU. Available only in GPU version.
+    # pydarknet.set_cuda_device(0)
 
     net = Detector(bytes("cfg/yolov3.cfg", encoding="utf-8"), bytes("weights/yolov3.weights", encoding="utf-8"), 0,
                    bytes("cfg/coco.data", encoding="utf-8"))
