@@ -55,7 +55,7 @@ cdef extern from "bridge.h":
 
     void do_nms_obj(detection *dets, int total, int classes, float thresh)
 
-    void show_image(image img, char* title)
+    void show_image(image img, char* title, int ms)
     void free_image(image img)
 
     detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num)
