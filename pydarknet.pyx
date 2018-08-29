@@ -56,8 +56,8 @@ cdef class Image:
             self.img.data = <float*>malloc(h*w*c*4)
             memcpy(self.img.data, np_buff.data, h*w*c*4)
 
-    def show_image(self, char* title):
-        show_image(self.img, title)
+    def show_image(self, char* title, int wait_duration_in_ms = 1):
+        show_image(self.img, title, wait_duration_in_ms)
 
     def __dealloc__(self):
         free_image(self.img)

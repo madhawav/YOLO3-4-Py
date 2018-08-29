@@ -51,11 +51,11 @@ if USE_CV & (get_libs("opencv") == '' or get_cflags("opencv") == ''):
 
 if USE_GPU:
     if USE_CV:
-        build_branch_name = "yolo34py-intergration"
+        build_branch_name = "yolo34py-intergration-v2"
     else:
-        build_branch_name = "yolo34py-intergration-nocv"
+        build_branch_name = "yolo34py-intergration-nocv-v2"
 else:
-    build_branch_name = "yolo34py-intergration-nogpu"
+    build_branch_name = "yolo34py-intergration-nogpu-v2"
     if "DARKNET_HOME" not in os.environ:
         if USE_CV:
             logging.warning("Non GPU darknet branch is used. Compiling wrapper without OpenCV!")
@@ -213,7 +213,7 @@ setup(
   long_description=get_readme(),
   long_description_content_type="text/markdown",
   cmdclass= cmd_class,
-  version='0.1.rc12',
+  version='0.1.rc13',
   ext_modules = ext_modules,
   platforms=["linux-x86_64"],
   setup_requires=[
