@@ -10,6 +10,7 @@ YOLO 3.0 is a real-time Object Detector by [pjreddie](https://pjreddie.com/).
 Image source: http://absfreepic.com/free-photos/download/crowded-cars-on-street-4032x2272_48736.html
 
 ## What's New?
+* 2019-01-15 - Added nvidia-docker support.
 * 2018-08-04 - Option to select the preferred GPU - `pydarknet.set_cuda_device(GPU_INDEX)`
 * 2018-04-23 - [PyPI Release of RC12](https://pypi.org/project/yolo34py-gpu)
 
