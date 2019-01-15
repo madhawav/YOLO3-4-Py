@@ -55,8 +55,11 @@ NOTE: Make sure CUDA_HOME environment variable is set.
 ## How to run demo using docker?
 1) Navigate to [docker](/docker) directory.
 2) Copy sample images into the `input` directory. Or else run [input/download_sample_images.sh](docker/input/download_sample_images.sh)
-3) Run `sh run.sh`
+3) Run `sh run.sh` or `sh run-gpu.sh`
 4) Observe the outputs generated in `output` directory.
+```
+GPU Version requires nvidia-docker
+```
 
 ## Installation from Source
 1) Set environment variables
