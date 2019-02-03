@@ -2,7 +2,12 @@ import tempfile
 from distutils.command.build import build
 from distutils.command.clean import clean
 import sys
-import numpy as np # TODO: Need a mechanism to ensure numpy is already installed
+try:
+    import numpy as np
+except ImportError:
+    import pip
+    pip.main(['install', 'numpy'])
+    import numpy as np
 import shutil
 
 # Compile using .cpp files if cython is not present
