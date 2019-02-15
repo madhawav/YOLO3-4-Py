@@ -16,9 +16,10 @@ Image source: http://absfreepic.com/free-photos/download/crowded-cars-on-street-
 
 ## Pre-requisites
 1) Python 3.5
-2) Numpy `pip3 install numpy`
-3) Cython `pip3 install cython`
-4) Optionally, OpenCV 3.x with Python bindings. (Tested on OpenCV 3.4.0)
+2) Python3-Dev (For Ubuntu, `sudo apt-get install python3-dev`)
+3) Numpy `pip3 install numpy`
+4) Cython `pip3 install cython`
+5) Optionally, OpenCV 3.x with Python bindings. (Tested on OpenCV 3.4.0)
     - You can use [this script](tools/install_opencv34.sh) to automate Open CV 3.4 installation (Tested on Ubuntu 16.04).
     - Performance of this approach is better than not using OpenCV.
     - Installations from PyPI distributions does not use OpenCV.
