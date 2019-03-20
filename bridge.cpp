@@ -21,7 +21,7 @@ image ipl_to_image(IplImage* src);
 using namespace cv;
 
 image get_darknet_image(const Mat &input){
-    // Darknet requires BGR order
+    // Darknet requires RGB order. Convert BGR to RGB.
     Mat flipped;
     cvtColor(input, flipped, CV_RGB2BGR);
 
