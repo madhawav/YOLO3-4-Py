@@ -14,7 +14,13 @@ IF USE_GPU == 1:
 
 cdef class Image:
     cdef image img;
+
     def __cinit__(self, np.ndarray ary):
+        """
+        Initialize a Darknet Image using a Numpy Array. Provide the input in BGR format.
+        :param ary: Image in BGR order.
+        :return:
+        """
         IF USE_CV == 1:
             # Code adapted from https://github.com/solivr/cython_opencvMat
             assert ary.ndim==3 and ary.shape[2]==3, "ASSERT::3channel RGB only!!"
@@ -37,7 +43,7 @@ cdef class Image:
             # Re-arrange to suite Darknet input format
             ary = ary.transpose(2, 0, 1)
 
-            # RGB to BGR
+            # BGR to RGB
             ary = ary[::-1,:,:]
 
             # 0..1 Range
@@ -56,7 +62,14 @@ cdef class Image:
             self.img.data = <float*>malloc(h*w*c*4)
             memcpy(self.img.data, np_buff.data, h*w*c*4)
 
+
     def show_image(self, char* title, int wait_duration_in_ms = 1):
+        """
+        Display image in a window/
+        :param title: Title of window
+        :param wait_duration_in_ms: Wait duration to block
+        :return:
+        """
         show_image(self.img, title, wait_duration_in_ms)
 
     def __dealloc__(self):
@@ -67,12 +80,25 @@ cdef class Detector:
     cdef metadata meta
 
     def __cinit__(self, char* config, char* weights, int p, char* meta):
+        """
+        Initialize a Darknet Model.
+        :param config: Path to config file.
+        :param weights: Path to weights file.
+        :param p: Pass Zero
+        :param meta: Path to coco.data file.
+        :return:
+        """
         self.net = load_network(config, weights, p)
         self.meta = get_metadata(meta)
 
     # Code adapted from https://github.com/pjreddie/darknet/blob/master/python/darknet.py
 
     def classify(self, Image img):
+        """
+        Classify an image using the model
+        :param img: Image to be classified
+        :return: Sorted list of <Label ID, Score> tuples.
+        """
         out = network_predict_image(self.net, img.img)
         res = []
         for i in range(self.meta.classes):
@@ -81,6 +107,14 @@ cdef class Detector:
         return res
 
     def detect(self, Image image, float thresh=.5, float hier_thresh=.5, float nms=.45):
+        """
+        Detect objects in an image using the model.
+        :param image: Image to process.
+        :param thresh: Threshold parameter.
+        :param hier_thresh: Hier Threshold Parameter.
+        :param nms: None maximal suppression parameter.
+        :return:
+        """
         cdef int num = 0
         cdef int* pnum = &num
         network_predict_image(self.net, image.img)
