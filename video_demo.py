@@ -1,4 +1,5 @@
 import time
+import os
 
 from pydarknet import Detector, Image
 import cv2
@@ -14,6 +15,10 @@ if __name__ == "__main__":
     print("Source Path:", args.path)
     cap = cv2.VideoCapture(args.path)
 
+    frame_width = int(cap.get(3))
+    frame_height = int(cap.get(4))
+
+    out = cv2.VideoWriter('video_labeled.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (frame_width,frame_height))
 
     average_time = 0
 
@@ -41,8 +46,8 @@ if __name__ == "__main__":
                 cv2.rectangle(frame, (int(x-w/2),int(y-h/2)),(int(x+w/2),int(y+h/2)),(255,0,0))
                 cv2.putText(frame, str(cat.decode("utf-8")), (int(x), int(y)), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 0))
 
+            out.write(frame)
             cv2.imshow("preview", frame)
-
 
         k = cv2.waitKey(1)
         if k == 0xFF & ord("q"):
