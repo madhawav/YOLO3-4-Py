@@ -63,6 +63,9 @@ NOTE: Make sure CUDA_HOME environment variable is set.
 GPU Version requires nvidia-docker
 ```
 
+If you see the error `(preview:17): Gtk-WARNING **: cannot open display: :1`, you may solve it
+by running `xhost +` in your host. Then, run the container again.
+
 ## Installation from Source
 1) Set environment variables
  - To enable GPU acceleration, `export GPU=1`.
