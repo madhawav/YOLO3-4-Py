@@ -1,24 +1,7 @@
-
-ARG UBUNTU_VERSION=16.04
-
-FROM nvidia/cudagl:9.0-devel-ubuntu${UBUNTU_VERSION} as base
-
-# This line instructs `debconf` to store in its database an answer for the program debconf.
-# If (the running program) debconf later asks (the database of answers) debconf what is 
-# my frontend the answer will be frontend is Noninteractive.
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-
-ENV NVIDIA_DRIVER_CAPABILITIES ${NVIDIA_DRIVER_CAPABILITIES},display
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        mesa-utils && \
-    rm -rf /var/lib/apt/lists/*
+FROM nvidia/cuda:9.0-cudnn7-devel
 
 ## Pyton installation ##
 RUN apt-get update && apt-get install -y python3.5 python3-pip git
-
-# graphic server
-RUN apt-get update && apt-get install -y x11-xserver-utils
 
 ## OpenCV 3.4 Installation ##
 RUN apt-get install -y build-essential cmake
@@ -34,10 +17,9 @@ WORKDIR /opencv-3.4.0
 RUN mkdir build
 WORKDIR /opencv-3.4.0/build
 RUN cmake -DBUILD_EXAMPLES=OFF ..
-RUN make -j
+RUN make -j4
 RUN make install
 RUN ldconfig
-
 
 ## Downloading and compiling darknet ##
 WORKDIR /
