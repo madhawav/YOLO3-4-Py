@@ -1,5 +1,6 @@
 import time
 
+import pydarknet
 from pydarknet import Detector, Image
 import cv2
 
@@ -24,6 +25,10 @@ if __name__ == "__main__":
             del dark_frame
 
             end_time = time.time()
+            # Frames per second can be calculated as 1 frame divided by time required to process 1 frame
+            fps = 1 / (end_time - start_time)
+            
+            print("FPS: ", fps)
             print("Elapsed Time:",end_time-start_time)
 
             for cat, score, bounds in results:
