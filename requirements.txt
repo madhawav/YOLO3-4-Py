@@ -1,1 +1,2 @@
+numpy
 cython>=0.27
