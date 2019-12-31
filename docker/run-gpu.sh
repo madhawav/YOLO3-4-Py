@@ -8,4 +8,4 @@ docker build -t yolo34py-gpu -f Dockerfile-gpu .
 docker run --runtime=nvidia -it --name yolo34py-gpu \
     --privileged -e DISPLAY="$DISPLAY" \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
-    -v "$(pwd)"/input:/YOLO3-4-Py/input -v "$(pwd)"/output:/YOLO3-4-Py/output yolo34py-gpu bash
+    -v "$(pwd)"/input:/YOLO3-4-Py/input -v "$(pwd)"/output:/YOLO3-4-Py/output yolo34py-gpu
