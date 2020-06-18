@@ -3,11 +3,20 @@ import cv2
 import os
 
 if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Process an image.')
+    parser.add_argument('path', metavar='image_path', type=str,
+                        help='Path to source image')
+
+    args = parser.parse_args()
+    print("Source Path:", args.path)
+    
     # net = Detector(bytes("cfg/densenet201.cfg", encoding="utf-8"), bytes("densenet201.weights", encoding="utf-8"), 0, bytes("cfg/imagenet1k.data",encoding="utf-8"))
 
     net = Detector(bytes("cfg/yolov3.cfg", encoding="utf-8"), bytes("weights/yolov3.weights", encoding="utf-8"), 0, bytes("cfg/coco.data",encoding="utf-8"))
 
-    img = cv2.imread(os.path.join(os.environ["DARKNET_HOME"],"data/dog.jpg"))
+    img = cv2.imread(args.path)
 
     img2 = Image(img)
 
