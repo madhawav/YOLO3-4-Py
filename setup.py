@@ -28,6 +28,10 @@ USE_CV = False
 if "GPU" in os.environ:
     if "DARKNET_HOME" in os.environ:
         logging.warning("GPU environment variable is skipped since DARKNET_HOME is specified")
+        if int(os.environ["GPU"]) == 1:
+            USE_GPU = True
+        else:
+            USE_GPU = False
     else:
         if int(os.environ["GPU"]) == 1:
             logging.info("Darknet will be compiled with GPU support")
