@@ -9,6 +9,10 @@ YOLO 3.0 is a real-time Object Detector by [pjreddie](https://pjreddie.com/).
 ![OutputImage](doc/output.jpg)
 Image source: http://absfreepic.com/free-photos/download/crowded-cars-on-street-4032x2272_48736.html
 
+## Google Colab Demo
+Refer the following link to preview YOLO3-4-Py in Google Colab: [[Google Colab](https://colab.research.google.com/drive/1DGzgpb8VR69EqSEb3bco6nSZQ_59eUZf?usp=sharing)]. 
+
+Copy the notebook to your drive and run all cells. Ensure that you are in a GPU runtime. You can change the runtime by accessing the menu __Runtime__/__Change runtime type__.
 ## What's New?
 * 2019-01-15 - Added nvidia-docker support.
 * 2018-08-04 - Option to select the preferred GPU - `pydarknet.set_cuda_device(GPU_INDEX)`
