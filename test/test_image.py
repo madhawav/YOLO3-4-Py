@@ -1,11 +1,9 @@
 from io import BytesIO
-
 import PIL.Image
 import numpy as np
 import requests
 
 from pydarknet import Detector, Image
-
 
 def test_image():
     r = requests.get("https://raw.githubusercontent.com/madhawav/darknet/master/data/dog.jpg")

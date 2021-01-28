@@ -8,7 +8,7 @@ install:
   - pip install pillow
   - pip install cython
   - pip install -r requirements.txt
-  - pip install .
+  - pip install ./src
 # command to run tests
 script:
   - pytest # or py.test for Python versions 3.5 and below
