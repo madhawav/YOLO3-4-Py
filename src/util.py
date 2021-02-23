@@ -59,20 +59,48 @@ def clean_darknet(darknet_path):
     '''
     shutil.rmtree(darknet_path,ignore_errors=True)
 
+def get_python_cflags():
+    '''
+    Utility method to retrieve compiler flags to compile a python library. Uses 'python3-config --cflags'.
+    '''
+    command = "python3-config --cflags"
+    proc = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate()
+
+    return out.rstrip().decode('utf-8').split()
+
+def get_python_libs():
+    '''
+    Utility method to retrieve linker flags to build a python library. Uses 'python3-config --libs'.
+    '''
+    command = "python3-config --libs"
+    proc = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate()    
+    
+    return out.rstrip().decode('utf-8').split()
+
+def get_readme():
+    '''
+    Retrieve readme of the package.
+    '''
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"pypi_readme.md"),"r") as f:
+        return f.read()
 
 # Code based on https://github.com/matze/pkgconfig
 def get_cflags(package):
     call_name = "pkg-config"
     if 'PKG_CONFIG' in os.environ:
-        call_name = "pkg-config"
+        call_name = os.environ['PKG_CONFIG']
 
     command = call_name + " --cflags " + package
 
     proc = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
 
-    return out.rstrip().decode('utf-8')
-
+    response = out.rstrip().decode('utf-8').split()
+    if len(response) == 0:
+        return None
+    return response
 
 def find_site_packages():
     site_packages = [p for p in sys.path if p.endswith("site-packages") or p.endswith("site-packages/")]
@@ -85,15 +113,14 @@ def find_dist_packages():
 def get_libs(package):
     call_name = "pkg-config"
     if 'PKG_CONFIG' in os.environ:
-        call_name = "pkg-config"
+        call_name = os.environ[PKG_CONFIG]
 
     command = call_name + " --libs " + package
 
     proc = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
 
-    return out.rstrip().decode('utf-8')
-
-def get_readme():
-    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"pypi_readme.md"),"r") as f:
-        return f.read()
+    response = out.rstrip().decode('utf-8').split()
+    if len(response) == 0:
+        return None
+    return response
