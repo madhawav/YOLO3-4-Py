@@ -15,7 +15,7 @@ else:
     use_cython = True
 
 from setuptools import setup, Extension
-from util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages, get_readme, find_dist_packages
+from util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages, get_readme, find_dist_packages, get_python_libs, get_python_cflags
 import logging
 import os
 
@@ -48,7 +48,7 @@ elif "OPENCV" in os.environ and int(os.environ["OPENCV"]) == 1:
     logging.info("Compiling wrapper with OpenCV")
     USE_CV = True
 
-if USE_CV & (get_libs("opencv") == '' or get_cflags("opencv") == ''):
+if USE_CV & (get_libs("opencv") is None or get_cflags("opencv") is None):
     logging.warning("OpenCV is not configured. Compiling wrapper without OpenCV!")
     USE_CV = False
 
@@ -82,8 +82,8 @@ include_paths = [np.get_include(), os.path.join(darknet_dir,"include"), os.path.
 libraries = ["darknet","m", "pthread"]
 library_paths = [".", "./__libdarknet"]
 
-extra_compiler_flags = [ get_cflags("python3")]
-extra_linker_flags = [get_libs("python3")]
+extra_compiler_flags = get_python_cflags()
+extra_linker_flags = get_python_libs()
 
 cython_compile_directives = {}
 macros = []
@@ -100,8 +100,8 @@ else:
     macros.append(("USE_GPU", 0))
 
 if USE_CV:
-    extra_compiler_flags.append(get_cflags("opencv"))
-    extra_linker_flags.append(get_libs("opencv"))
+    extra_compiler_flags.extend(get_cflags("opencv"))
+    extra_linker_flags.extend(get_libs("opencv"))
     cython_compile_directives["USE_CV"] = 1
     macros.append(("USE_CV", 1))
 else:
