@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/madhawav/YOLO3-4-Py.svg?branch=master)](https://travis-ci.org/madhawav/YOLO3-4-Py)
 
 A Python wrapper on [Darknet](https://github.com/pjreddie/darknet). Compatible with latest [YOLO V3](https://pjreddie.com/darknet/yolo).
-YOLO 3.0 is a real-time Object Detector by [pjreddie](https://pjreddie.com/).
+YOLO 3.0 is an Object Detector by [pjreddie](https://pjreddie.com/).
 
 ![OutputImage](doc/output.jpg)
 Image source: http://absfreepic.com/free-photos/download/crowded-cars-on-street-4032x2272_48736.html
