@@ -14,13 +14,14 @@ Refer the following link to preview YOLO3-4-Py in Google Colab: [[Google Colab](
 
 Copy the notebook to your drive and run all cells. Ensure that you are in a GPU runtime. You can change the runtime by accessing the menu __Runtime__/__Change runtime type__.
 ## What's New?
+* 2021-02-27 - Fixed the pkg-config related issue affecting some users of Ubuntu 20.04 and later.
 * 2020-06-18 - Added a sample Google Colab notebook demonstrating functionality.
 * 2019-01-15 - Added nvidia-docker support.
 * 2018-08-04 - Option to select the preferred GPU - `pydarknet.set_cuda_device(GPU_INDEX)`
 * 2018-04-23 - [PyPI Release of RC12](https://pypi.org/project/yolo34py-gpu)
 
 ## Pre-requisites
-1) Python 3.5
+1) Python 3.5+
 2) Python3-Dev (For Ubuntu, `sudo apt-get install python3-dev`)
 3) Numpy `pip3 install numpy`
 4) Cython `pip3 install cython`
