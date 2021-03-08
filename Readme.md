@@ -87,3 +87,6 @@ Kindly raise your issues in the issues section of GitHub repository.
 ## Like to contribute?
 Feel free to send PRs or discuss on possible future improvements in issues section. 
 Your contributions are most welcome!
+
+## Looking for YOLO v4?
+https://github.com/AlexeyAB/darknet
