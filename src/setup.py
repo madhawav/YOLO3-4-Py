@@ -217,7 +217,7 @@ setup(
   long_description=get_readme(),
   long_description_content_type="text/markdown",
   cmdclass= cmd_class,
-  version='0.1.rc28',
+  version='0.1.rc30',
   ext_modules = ext_modules,
   platforms=["linux-x86_64"],
   setup_requires=[

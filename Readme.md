@@ -45,6 +45,7 @@ pip3 install yolo34py
 ```bash
 pip3 install yolo34py-gpu
 ```
+If the installation using PIP fails, try installing from source.
 
 ```
 NOTE: PyPI Deployments does not use OpenCV due to complexity involved in installation. 
