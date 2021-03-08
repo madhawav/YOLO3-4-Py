@@ -15,7 +15,7 @@ else:
     use_cython = True
 
 from setuptools import setup, Extension
-from util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages, get_readme, find_dist_packages, get_python_libs, get_python_cflags
+from setup_util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages, get_readme, find_dist_packages, get_python_libs, get_python_cflags
 import logging
 import os
 
@@ -217,20 +217,20 @@ setup(
   long_description=get_readme(),
   long_description_content_type="text/markdown",
   cmdclass= cmd_class,
-  version='0.1.rc13',
+  version='0.1.rc28',
   ext_modules = ext_modules,
   platforms=["linux-x86_64"],
   setup_requires=[
       'cython>=0.27',
-      'requests',
-      'numpy'
+      'numpy',
+      'requests'
   ],
   install_requires=[
       'cython>=0.27',
-      'requests',
-      'numpy'
+      'numpy',
+      'requests'
   ],
-  python_requires='>=3.5',
+  python_requires='>=3.6',
   author='Madhawa Vidanapathirana',
   author_email='madhawavidanapathirana@gmail.com',
   url="https://github.com/madhawav/YOLO3-4-Py",
