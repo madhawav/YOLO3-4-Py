@@ -230,6 +230,7 @@ setup(
       'requests',
       'numpy'
   ],
+  zip_safe=False,
   python_requires='>=3.5',
   author='Madhawa Vidanapathirana',
   author_email='madhawavidanapathirana@gmail.com',
