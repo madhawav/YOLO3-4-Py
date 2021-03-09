@@ -1,6 +1,6 @@
 # YOLO3-4-Py
-[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0rc12-blue.svg)](https://pypi.org/project/yolo34py)
-[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0rc12--gpu-blue.svg)](https://pypi.org/project/yolo34py-gpu)
+[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0-blue.svg)](https://pypi.org/project/yolo34py)
+[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0--gpu-blue.svg)](https://pypi.org/project/yolo34py-gpu)
 [![Build Status](https://travis-ci.org/madhawav/YOLO3-4-Py.svg?branch=master)](https://travis-ci.org/madhawav/YOLO3-4-Py)
 
 A Python wrapper on [Darknet](https://github.com/pjreddie/darknet). Compatible with latest [YOLO V3](https://pjreddie.com/darknet/yolo).
@@ -74,7 +74,7 @@ GPU Version requires nvidia-docker
  - To enable GPU acceleration, `export GPU=1`.
  - To enable OpenCV, `export OPENCV=1`
  
-2) Navigate to source root and run `pip3 install ./src` to install library.
+2) Navigate to `./src` and run `pip3 install .` to install library.
 
 ### Using a custom version of Darknet
 1) Set environment variable DARKNET_HOME to download location of darknet.

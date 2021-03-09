@@ -1,12 +1,14 @@
 *.idea
-dist/*
-build/*
+src/dist/*
+src/build/*
+
 .viscode
 
 data/*
 
 __libdarknet/*.so
 
+*.eggs
 *.egg-info
 
 cfg/*.data

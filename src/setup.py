@@ -1,8 +1,9 @@
 import tempfile
+import os.path as osp
 from distutils.command.build import build
 from distutils.command.clean import clean
 import sys
-import numpy as np # TODO: Need a mechanism to ensure numpy is already installed
+import numpy as np # TODO: Need a mechanism to ensure numpy is already installed. Define a pyproject.toml file.
 import shutil
 
 # Compile using .cpp files if cython is not present
@@ -15,7 +16,7 @@ else:
     use_cython = True
 
 from setuptools import setup, Extension
-from util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages, get_readme, find_dist_packages, get_python_libs, get_python_cflags
+from setup_util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages, get_readme, find_dist_packages, get_python_libs, get_python_cflags
 import logging
 import os
 
@@ -24,6 +25,7 @@ logging.basicConfig(level=logging.INFO)
 # Default configuration
 USE_GPU = False
 USE_CV = False
+DEFAULT_CUDA_HOME = "/usr/local/cuda"
 
 if "GPU" in os.environ:
     if "DARKNET_HOME" in os.environ:
@@ -89,8 +91,14 @@ cython_compile_directives = {}
 macros = []
 
 if USE_GPU:
+    cuda_home = None
     if "CUDA_HOME" in os.environ:
-        include_paths.append(os.path.join(os.environ["CUDA_HOME"],"include"))
+        cuda_home = os.environ["CUDA_HOME"]
+    elif osp.exists(DEFAULT_CUDA_HOME):
+        cuda_home = DEFAULT_CUDA_HOME
+
+    if cuda_home is not None:
+        include_paths.append(os.path.join(cuda_home,"include"))
     else:
         raise Exception("Environment variable CUDA_HOME not set")
     cython_compile_directives["USE_GPU"] = 1
@@ -217,7 +225,7 @@ setup(
   long_description=get_readme(),
   long_description_content_type="text/markdown",
   cmdclass= cmd_class,
-  version='0.1.rc13',
+  version='0.1',
   ext_modules = ext_modules,
   platforms=["linux-x86_64"],
   setup_requires=[
@@ -230,6 +238,7 @@ setup(
       'requests',
       'numpy'
   ],
+  zip_safe=False,
   python_requires='>=3.5',
   author='Madhawa Vidanapathirana',
   author_email='madhawavidanapathirana@gmail.com',
