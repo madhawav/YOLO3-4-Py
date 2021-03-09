@@ -3,7 +3,7 @@ import os.path as osp
 from distutils.command.build import build
 from distutils.command.clean import clean
 import sys
-import numpy as np # TODO: Need a mechanism to ensure numpy is already installed
+import numpy as np # TODO: Need a mechanism to ensure numpy is already installed. Define a pyproject.toml file.
 import shutil
 
 # Compile using .cpp files if cython is not present
@@ -16,7 +16,7 @@ else:
     use_cython = True
 
 from setuptools import setup, Extension
-from util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages, get_readme, find_dist_packages, get_python_libs, get_python_cflags
+from setup_util import build_darknet, clean_darknet, get_cflags, get_libs, find_site_packages, get_readme, find_dist_packages, get_python_libs, get_python_cflags
 import logging
 import os
 
@@ -225,7 +225,7 @@ setup(
   long_description=get_readme(),
   long_description_content_type="text/markdown",
   cmdclass= cmd_class,
-  version='0.1.rc54',
+  version='0.1.rc61',
   ext_modules = ext_modules,
   platforms=["linux-x86_64"],
   setup_requires=[

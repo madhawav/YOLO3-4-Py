@@ -113,7 +113,7 @@ def find_dist_packages():
 def get_libs(package):
     call_name = "pkg-config"
     if 'PKG_CONFIG' in os.environ:
-        call_name = os.environ[PKG_CONFIG]
+        call_name = os.environ["PKG_CONFIG"]
 
     command = call_name + " --libs " + package
 
