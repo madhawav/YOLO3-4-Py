@@ -225,7 +225,7 @@ setup(
   long_description=get_readme(),
   long_description_content_type="text/markdown",
   cmdclass= cmd_class,
-  version='0.1.rc61',
+  version='0.1',
   ext_modules = ext_modules,
   platforms=["linux-x86_64"],
   setup_requires=[

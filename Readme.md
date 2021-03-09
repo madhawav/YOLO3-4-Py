@@ -1,6 +1,6 @@
 # YOLO3-4-Py
-[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0rc12-blue.svg)](https://pypi.org/project/yolo34py)
-[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0rc12--gpu-blue.svg)](https://pypi.org/project/yolo34py-gpu)
+[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0-blue.svg)](https://pypi.org/project/yolo34py)
+[![PyPI Badge](https://img.shields.io/badge/PyPI-0.1.0--gpu-blue.svg)](https://pypi.org/project/yolo34py-gpu)
 [![Build Status](https://travis-ci.org/madhawav/YOLO3-4-Py.svg?branch=master)](https://travis-ci.org/madhawav/YOLO3-4-Py)
 
 A Python wrapper on [Darknet](https://github.com/pjreddie/darknet). Compatible with latest [YOLO V3](https://pjreddie.com/darknet/yolo).
