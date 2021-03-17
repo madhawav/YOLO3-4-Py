@@ -5,7 +5,6 @@ import zipfile
 import shutil
 import logging
 import sys
-import requests # Used to download darknet
 
 darknet_setup_done = False  # Guard to avoid repeated building of darknet.
 
@@ -42,6 +41,7 @@ def build_darknet(download_path, darknet_url, branch_name):
     :param branch_name: Branch of darknet used.
     :return:
     """
+    import requests  # Used to download darknet
     logging.info("Temp Path: " + download_path)
 
     logging.info("Downloading darknet")
