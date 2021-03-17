@@ -5,14 +5,32 @@ import numpy as np
 from libc.string cimport memcpy
 from libc.stdlib cimport malloc
 
-is_compiled_with_gpu = bool(USE_GPU)
-is_compiled_with_opencv = bool(USE_CV)
+# USE_GPU and USE_CV are macros defined during the setup process.
+
+def is_compiled_with_gpu():
+    """
+    Indicates whether the library is compiled with GPU support
+    """
+    return bool(USE_GPU)
+
+def is_compiled_with_opencv():
+    """
+    Indicates whether the library is compiled with OpenCV support
+    """
+    return bool(USE_CV)
+
 
 IF USE_GPU == 1:
     def set_cuda_device(n):
+        """
+        Specify the CUDA device.
+        """
         cuda_set_device(n)
 
 cdef class Image:
+    """
+    Darknet Image
+    """
     cdef image img;
 
     def __cinit__(self, np.ndarray ary):
@@ -65,8 +83,8 @@ cdef class Image:
 
     def show_image(self, char* title, int wait_duration_in_ms = 1):
         """
-        Display image in a window/
-        :param title: Title of window
+        Display image in a window
+        :param title: Title of the window
         :param wait_duration_in_ms: Wait duration to block
         :return:
         """
@@ -76,12 +94,16 @@ cdef class Image:
         free_image(self.img)
 
 cdef class Detector:
+    """
+    A darknet model
+    """
+
     cdef network* net
     cdef metadata meta
 
     def __cinit__(self, char* config, char* weights, int p, char* meta):
         """
-        Initialize a Darknet Model.
+        Initialize a Darknet model.
         :param config: Path to config file.
         :param weights: Path to weights file.
         :param p: Pass Zero

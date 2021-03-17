@@ -5,7 +5,7 @@ Also compatible with other Darknet Object Detection models.
 Image source: http://absfreepic.com/free-photos/download/crowded-cars-on-street-4032x2272_48736.html
 
 # Prerequisites
-* Python 3.5+
+* Python 3.6+
 * Linux x86-64 Operating System
 * nVidia CUDA SDK (for GPU version only. Make sure nvcc is available in PATH variable.)
 

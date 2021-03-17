@@ -1,22 +1,17 @@
 #include "bridge.h"
 
 #if USE_CV == 1
-
-#include <iostream>
-
-#include <stdio.h>
-
-
+#include <opencv2/opencv.hpp>
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // __cplusplus
 // Include darknet as a C Library
 image ipl_to_image(IplImage* src);
 
 #ifdef __cplusplus
 }
-#endif
+#endif // __cplusplus
 
 using namespace cv;
 
@@ -42,4 +37,4 @@ image get_darknet_image(const Mat &input){
     return darknet_image;
 }
 
-#endif
+#endif // USE_CV == 1
