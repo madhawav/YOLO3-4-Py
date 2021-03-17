@@ -5,14 +5,32 @@ import numpy as np
 from libc.string cimport memcpy
 from libc.stdlib cimport malloc
 
-is_compiled_with_gpu = bool(USE_GPU)
-is_compiled_with_opencv = bool(USE_CV)
+# USE_GPU and USE_CV are macros defined during the setup process.
+
+def is_compiled_with_gpu():
+    """
+    Indicates whether the library is compiled with GPU support
+    """
+    return bool(USE_GPU)
+
+def is_compiled_with_opencv():
+    """
+    Indicates whether the library is compiled with OpenCV support
+    """
+    return bool(USE_CV)
+
 
 IF USE_GPU == 1:
     def set_cuda_device(n):
+        """
+        Specify the CUDA device.
+        """
         cuda_set_device(n)
 
 cdef class Image:
+    """
+    Darknet Image
+    """
     cdef image img;
 
     def __cinit__(self, np.ndarray ary):
@@ -76,6 +94,10 @@ cdef class Image:
         free_image(self.img)
 
 cdef class Detector:
+    """
+    A darknet model
+    """
+
     cdef network* net
     cdef metadata meta
 

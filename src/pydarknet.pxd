@@ -2,6 +2,12 @@
 
 import numpy as np
 cimport numpy as np
+"""
+Re-definition of methods and structures imported from darknet.
+Refer https://github.com/pjreddie/darknet/blob/master/include/darknet.h for definitions.
+"""
+
+# Doc-strings are not present in the following since darknet.h doesn't provide them.
 
 cdef extern from "bridge.h":
     cdef int CV_8UC3

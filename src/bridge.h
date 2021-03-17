@@ -1,19 +1,12 @@
-#if USE_CV == 1
-    #include <opencv2/opencv.hpp>
-#endif
-
-#if USE_GPU == 1
-    // Set GPU tag so darknet.h is imported with GPU features
-    #define GPU
-    #include <cuda_runtime.h>
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-// Types and methods included from darknet.h
+// Types and methods included from darknet.h.
 // We cannot directly import darknet.h since it links to C++ header files from CUDA.
 // The above happens because __cplusplus flag stays active within the extern "C" block.
+
+// Docstrings are not present since darknet.h doesn't provide them.
+
 struct network;
 typedef struct network network;
 
@@ -61,8 +54,8 @@ detection *get_network_boxes(network *net, int w, int h, float thresh, float hie
 }
 #endif
 
-
+// For OpenCV Version
 #if USE_CV == 1
-    using namespace cv;
-    image get_darknet_image(const Mat &input);
+    #include <opencv2/opencv.hpp>
+    image get_darknet_image(const cv::Mat &input);
 #endif
