@@ -65,8 +65,8 @@ cdef class Image:
 
     def show_image(self, char* title, int wait_duration_in_ms = 1):
         """
-        Display image in a window/
-        :param title: Title of window
+        Display image in a window
+        :param title: Title of the window
         :param wait_duration_in_ms: Wait duration to block
         :return:
         """
@@ -81,7 +81,7 @@ cdef class Detector:
 
     def __cinit__(self, char* config, char* weights, int p, char* meta):
         """
-        Initialize a Darknet Model.
+        Initialize a Darknet model.
         :param config: Path to config file.
         :param weights: Path to weights file.
         :param p: Pass Zero

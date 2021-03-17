@@ -8,32 +8,59 @@ import sys
 
 logging.basicConfig(level=logging.INFO)
 
-def build_darknet(darknet_dir, branch_name, target_location):
-    '''
-    Utility method to download and install darknet
-    :param download_path:
+darknet_setup_done = False  # Guard to avoid repeated building of darknet.
+
+
+def setup_darknet(target_location, download_darknet, darknet_dir, darknet_url, build_branch_name):
+    """
+    Locates compiled darknet and moves it to target_location. Download and compile darknet if required.
+    """
+    global darknet_setup_done
+    if darknet_setup_done:
+        return
+
+    if download_darknet:
+        # If user has not specified DARKNET_HOME, we will download and build darknet.
+        build_darknet(darknet_dir, darknet_url, build_branch_name)
+        logging.info("Moving to " + target_location)
+        shutil.move(os.path.join(darknet_dir, "darknet-" + build_branch_name + "/libdarknet.so"), target_location)
+    else:
+        logging.info("Copying libdarknet.so from " + darknet_dir)
+        # If user has set DARKNET_HOME, it is assumed that he has built darknet.
+        # We will copy libdarknet.so from users location to site-pacakges/__libdarknet
+        shutil.copyfile(os.path.join(darknet_dir, "libdarknet.so"),
+                        target_location)
+
+    darknet_setup_done = True
+
+
+def build_darknet(download_path, darknet_url, branch_name):
+    """
+    Utility method to download and build darknet
+    :param download_path: Path to download darknet sources
+    :param branch_name: Branch of darknet used.
     :return:
-    '''
+    """
     import requests
-    download_path = darknet_dir
-    logging.info("Temp Path: "+ download_path)
+    logging.info("Temp Path: " + download_path)
 
     logging.info("Downloading darknet")
     os.makedirs(download_path, exist_ok=True)
-    response = requests.get('https://github.com/madhawav/darknet/archive/'+branch_name+'.zip')
+    response = requests.get(darknet_url)
 
     logging.info("Extracting darknet")
-    with open(os.path.join(download_path,"darknet.zip"), "wb") as f:
+    with open(os.path.join(download_path, "darknet.zip"), "wb") as f:
         f.write(response.content)
 
-    zip_ref = zipfile.ZipFile(os.path.join(download_path,"darknet.zip"), 'r')
+    zip_ref = zipfile.ZipFile(os.path.join(download_path, "darknet.zip"), 'r')
     zip_ref.extractall(download_path)
     zip_ref.close()
 
     os.remove(os.path.join(download_path, "darknet.zip"))
 
     logging.info("Building darknet")
-    build_ret = subprocess.Popen("make", shell=True, stdout=subprocess.PIPE, cwd=os.path.join(download_path,"darknet-"+branch_name))
+    build_ret = subprocess.Popen("make", shell=True, stdout=subprocess.PIPE,
+                                 cwd=os.path.join(download_path, "darknet-" + branch_name))
 
     for line in iter(build_ret.stdout.readline, ''):
         if len(line) != 0:
@@ -46,45 +73,47 @@ def build_darknet(darknet_dir, branch_name, target_location):
     else:
         return False
 
-    logging.info("Moving to " + target_location)
-    shutil.move(os.path.join(download_path,"darknet-"+branch_name+"/libdarknet.so"), target_location)
-
     return True
 
+
 def clean_darknet(darknet_path):
-    '''
+    """
     Cleanup darknet download
     :param darknet_path:
     :return:
-    '''
-    shutil.rmtree(darknet_path,ignore_errors=True)
+    """
+    shutil.rmtree(darknet_path, ignore_errors=True)
+
 
 def get_python_cflags():
-    '''
+    """
     Utility method to retrieve compiler flags to compile a python library. Uses 'python3-config --cflags'.
-    '''
+    """
     command = "python3-config --cflags"
     proc = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
 
     return out.rstrip().decode('utf-8').split()
 
+
 def get_python_libs():
-    '''
+    """
     Utility method to retrieve linker flags to build a python library. Uses 'python3-config --libs'.
-    '''
+    """
     command = "python3-config --libs"
     proc = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate()    
-    
+    out, err = proc.communicate()
+
     return out.rstrip().decode('utf-8').split()
 
+
 def get_readme():
-    '''
+    """
     Retrieve readme of the package.
-    '''
-    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"pypi_readme.md"),"r") as f:
+    """
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pypi_readme.md"), "r") as f:
         return f.read()
+
 
 # Code based on https://github.com/matze/pkgconfig
 def get_cflags(package):
@@ -102,13 +131,16 @@ def get_cflags(package):
         return None
     return response
 
+
 def find_site_packages():
     site_packages = [p for p in sys.path if p.endswith("site-packages") or p.endswith("site-packages/")]
     return site_packages
 
+
 def find_dist_packages():
     dist_packages = [p for p in sys.path if p.endswith("dist-packages") or p.endswith("dist-packages/")]
     return dist_packages
+
 
 def get_libs(package):
     call_name = "pkg-config"
