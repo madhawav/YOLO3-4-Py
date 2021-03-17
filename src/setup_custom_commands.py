@@ -9,6 +9,7 @@ try:
     from Cython.Distutils import build_ext
 except ImportError:
     from distutils.command.build_ext import build_ext
+
     use_cython = False
 else:
     use_cython = True
@@ -21,13 +22,15 @@ def generate_command_class(params):
     Generates the custom commands used by setup.
     :param: params: Parameters of setup.
     """
+
     class CustomBuild(build):
         """
         Build the package.
         """
+
         def run(self):
             # This is triggered when src distribution is made. Not triggered for build_ext.
-            setup_darknet(download_darknet = params.darknet_download_required, target_location=osp.join(
+            setup_darknet(download_darknet=params.darknet_download_required, target_location=osp.join(
                 osp.dirname(osp.abspath(__file__)), "__libdarknet", "libdarknet.so"), darknet_url=params.darknet_url,
                           darknet_dir=params.darknet_home, build_branch_name=params.darknet_branch_name)
             build.run(self)
@@ -37,10 +40,12 @@ def generate_command_class(params):
         Build extensions such as cython files.
         The compiled cython files (which become C files) are packaged with the source distribution.
         """
+
         def run(self):
             try:
                 setup_darknet(download_darknet=params.darknet_download_required, darknet_url=params.darknet_url,
-                              target_location=osp.join(osp.dirname(osp.abspath(__file__)), "__libdarknet", "libdarknet.so"),
+                              target_location=osp.join(osp.dirname(osp.abspath(__file__)), "__libdarknet",
+                                                       "libdarknet.so"),
                               darknet_dir=params.darknet_home, build_branch_name=params.darknet_branch_name)
                 build_ext.run(self)
             finally:
@@ -51,23 +56,24 @@ def generate_command_class(params):
         """
         Clean operation
         """
+
         def run(self):
-            if osp.exists(osp.join(osp.dirname(osp.abspath(__file__)),"__libdarknet","libdarknet.so")):
+            if osp.exists(osp.join(osp.dirname(osp.abspath(__file__)), "__libdarknet", "libdarknet.so")):
                 logging.info("Removing __libdarknet/libdarknet.so")
-                os.remove(osp.join(osp.dirname(__file__),"__libdarknet","libdarknet.so"))
+                os.remove(osp.join(osp.dirname(__file__), "__libdarknet", "libdarknet.so"))
 
             if osp.exists(osp.join(osp.dirname(osp.abspath(__file__)), "libdarknet.so")):
                 logging.info("Removing libdarknet.so")
-                os.remove(osp.join(osp.dirname(osp.abspath(__file__)),"libdarknet.so"))
+                os.remove(osp.join(osp.dirname(osp.abspath(__file__)), "libdarknet.so"))
 
-            if osp.exists(osp.join(osp.dirname(osp.abspath(__file__)),"pydarknet.cpp")):
+            if osp.exists(osp.join(osp.dirname(osp.abspath(__file__)), "pydarknet.cpp")):
                 logging.info("Removing pydarknet.cpp")
-                os.remove(osp.join(osp.dirname(osp.abspath(__file__)),"pydarknet.cpp"))
+                os.remove(osp.join(osp.dirname(osp.abspath(__file__)), "pydarknet.cpp"))
 
             for f in os.listdir(osp.dirname(osp.abspath(__file__))):
                 if f.startswith("pydarknet.") and f.endswith(".so"):
                     logging.info("Removing " + f)
-                    os.remove(osp.join(osp.dirname(osp.abspath(__file__)),f))
+                    os.remove(osp.join(osp.dirname(osp.abspath(__file__)), f))
 
             clean.run(self)
 

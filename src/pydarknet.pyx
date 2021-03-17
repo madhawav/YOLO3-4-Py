@@ -19,7 +19,6 @@ def is_compiled_with_opencv():
     """
     return bool(USE_CV)
 
-
 IF USE_GPU == 1:
     def set_cuda_device(n):
         """
@@ -92,6 +91,7 @@ cdef class Image:
 
     def __dealloc__(self):
         free_image(self.img)
+
 
 cdef class Detector:
     """

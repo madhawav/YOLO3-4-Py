@@ -6,6 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
+
 // Include darknet as a C Library
 image ipl_to_image(IplImage* src);
 
@@ -22,10 +23,10 @@ image get_darknet_image(const Mat &input){
 
     // Darknet uses IPL Image
     IplImage* iplImage;
-    iplImage = cvCreateImage(cvSize(flipped.cols,flipped.rows),8,3);
+    iplImage = cvCreateImage(cvSize(flipped.cols, flipped.rows), 8, 3);
 
-    IplImage ipltemp=flipped;
-    cvCopy(&ipltemp,iplImage);
+    IplImage ipltemp = flipped;
+    cvCopy(&ipltemp, iplImage);
 
     flipped.release();
 

@@ -5,10 +5,11 @@ import zipfile
 import shutil
 import logging
 import sys
-
-logging.basicConfig(level=logging.INFO)
+import requests # Used to download darknet
 
 darknet_setup_done = False  # Guard to avoid repeated building of darknet.
+
+logging.basicConfig(level=logging.INFO)
 
 
 def setup_darknet(target_location, download_darknet, darknet_dir, darknet_url, build_branch_name):
@@ -41,7 +42,6 @@ def build_darknet(download_path, darknet_url, branch_name):
     :param branch_name: Branch of darknet used.
     :return:
     """
-    import requests
     logging.info("Temp Path: " + download_path)
 
     logging.info("Downloading darknet")
@@ -117,6 +117,10 @@ def get_readme():
 
 # Code based on https://github.com/matze/pkgconfig
 def get_cflags(package):
+    """
+    Retrieve cflags of a package using pkg-config.
+    """
+
     call_name = "pkg-config"
     if 'PKG_CONFIG' in os.environ:
         call_name = os.environ['PKG_CONFIG']
@@ -133,16 +137,28 @@ def get_cflags(package):
 
 
 def find_site_packages():
+    """
+    Retrieve site-packages directories.
+    """
+
     site_packages = [p for p in sys.path if p.endswith("site-packages") or p.endswith("site-packages/")]
     return site_packages
 
 
 def find_dist_packages():
+    """
+    Retrieve dist-packages directories.
+    """
+
     dist_packages = [p for p in sys.path if p.endswith("dist-packages") or p.endswith("dist-packages/")]
     return dist_packages
 
 
 def get_libs(package):
+    """
+    Retrieve libs of a package using pkg-config.
+    """
+
     call_name = "pkg-config"
     if 'PKG_CONFIG' in os.environ:
         call_name = os.environ["PKG_CONFIG"]

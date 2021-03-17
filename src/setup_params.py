@@ -20,7 +20,11 @@ class Params:
     """
     Configuration used by the setup script.
     """
+
     def __init__(self):
+        """
+        Initialize to default configuration
+        """
         self.__use_gpu = False
         self.__use_cv = False
         self.__cuda_home = DEFAULT_CUDA_LOCATION
