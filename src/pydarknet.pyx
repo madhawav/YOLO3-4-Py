@@ -151,7 +151,7 @@ cdef class Detector:
             for i in range(self.meta.classes):
                 if dets[j].prob[i] > 0:
                     b = dets[j].bbox
-                    res.append((self.meta.names[i], dets[j].prob[i], (b.x, b.y, b.w, b.h)))
+                    res.append((self.meta.names[i].decode("utf-8"), dets[j].prob[i], (b.x, b.y, b.w, b.h)))
         res = sorted(res, key=lambda x: -x[1])
 
         free_detections(dets, num)

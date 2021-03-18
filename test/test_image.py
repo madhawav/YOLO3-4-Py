@@ -20,7 +20,7 @@ def test_image():
 
     results = net.detect(img2)
 
-    results_labels = [x[0].decode("utf-8") for x in results]
+    results_labels = [x[0] for x in results]
 
     assert "bicycle" in results_labels
     assert "dog" in results_labels
