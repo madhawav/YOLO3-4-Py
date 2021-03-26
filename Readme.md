@@ -39,12 +39,12 @@ Installation from PyPI distribution (as described below) is the most convenient 
 
 ### Installation of CPU Only Version
 ```bash
-pip3 install yolo34py
+python3 -m pip install yolo34py
 ```
 
 ### Installation of GPU Accelerated Version
 ```bash
-pip3 install yolo34py-gpu
+python3 -m pip install yolo34py-gpu
 ```
 
 ```
