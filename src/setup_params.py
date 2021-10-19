@@ -70,7 +70,7 @@ class Params:
         if not isinstance(value, str):
             raise TypeError()
 
-        if not osp.exists(self.cuda_home):
+        if not osp.exists(value):
             raise Exception("Unable to locate CUDA installation. Please specify CUDA_HOME environment variable.")
         self.__cuda_home = value
 
